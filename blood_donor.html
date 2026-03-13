@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BloodLink — Donor Network</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --accent:        #D4243A;
+  --accent-deep:   #AA1B2D;
+  --accent-soft:   #F9E8EB;
+  --accent-mid:    #EFA0AA;
+  --accent-border: rgba(212,36,58,0.14);
+  --wa:            #25C560;
+  --wa-tint:       #E8FAF0;
+  --wa-border:     rgba(37,197,96,0.18);
+  --ok:            #16A34A;
+  --ok-tint:       #DCFCE7;
+  --ok-border:     rgba(22,163,74,0.2);
+  --warn:          #D97706;
+  --warn-tint:     #FEF3C7;
+  --warn-border:   rgba(217,119,6,0.2);
+  --page:          #FAF8F6;
+  --card:          #FFFFFF;
+  --card-2:        #FEF9F7;
+  --surface-soft:  #FDF5F3;
+  --line:          #EDE8E4;
+  --line-strong:   #DDD6D0;
+  --ink:           #1C1614;
+  --ink-2:         #3E342F;
+  --ink-3:         #7D6E68;
+  --ink-4:         #B5A9A3;
+  --r-xs: 6px; --r-sm: 10px; --r-md: 16px; --r-lg: 22px; --r-xl: 28px;
+  --shadow-card: 0 1px 0 var(--line), 0 4px 24px rgba(28,22,20,0.06);
+  --shadow-btn:  0 2px 12px rgba(212,36,58,0.22);
+  --shadow-hover:0 8px 32px rgba(212,36,58,0.16);
+}
+
+html { scroll-behavior: smooth; }
+body { background: var(--page); font-family: 'Plus Jakarta Sans', sans-serif; min-height: 100vh; color: var(--ink); -webkit-font-smoothing: antialiased; }
+
+/* HEADER */
+.header { background: rgba(250,248,246,0.92); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 60; }
+.header-inner { max-width: 720px; margin: 0 auto; padding: 0 32px; height: 68px; display: flex; align-items: center; justify-content: space-between; }
+.logo { display: flex; align-items: center; gap: 12px; }
+.logo-mark { width: 36px; height: 36px; background: linear-gradient(135deg, var(--accent) 0%, #F04A60 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 3px 12px rgba(212,36,58,0.32); }
+.logo-mark svg { width: 18px; height: 18px; }
+.logo-text { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--ink); letter-spacing: -0.02em; line-height: 1; }
+.logo-text em { color: var(--accent); font-style: italic; }
+.live-pill { display: flex; align-items: center; gap: 7px; padding: 6px 14px 6px 11px; border-radius: 100px; background: var(--accent-soft); border: 1px solid var(--accent-border); }
+.live-dot { width: 7px; height: 7px; background: var(--accent); border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
+.live-text { font-size: 0.66rem; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; color: var(--accent); }
+
+/* HERO */
+.hero { background: linear-gradient(135deg, #FDEEF0 0%, #FFF5F2 50%, #FEF0F3 100%); border-bottom: 1px solid var(--line); padding: 40px 32px 36px; position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; right: -60px; top: -70px; width: 260px; height: 260px; border-radius: 50%; background: radial-gradient(circle, rgba(212,36,58,0.09) 0%, transparent 70%); }
+.hero::after { content: ''; position: absolute; left: -40px; bottom: -60px; width: 180px; height: 180px; border-radius: 50%; background: radial-gradient(circle, rgba(212,36,58,0.06) 0%, transparent 70%); }
+.hero-inner { max-width: 720px; margin: 0 auto; position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.hero-eyebrow { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 100px; background: var(--accent-soft); border: 1px solid var(--accent-border); font-size: 0.65rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+.hero-headline { font-family: 'Playfair Display', serif; font-size: 2.1rem; color: var(--ink); letter-spacing: -0.03em; line-height: 1.12; margin-bottom: 10px; }
+.hero-headline span { color: var(--accent); font-style: italic; }
+.hero-sub { font-size: 0.84rem; color: var(--ink-3); line-height: 1.65; max-width: 340px; }
+.hero-stat { flex-shrink: 0; background: var(--card); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 20px 24px; text-align: center; box-shadow: var(--shadow-card); min-width: 110px; }
+.hero-stat-num { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--accent); letter-spacing: -0.03em; line-height: 1; margin-bottom: 4px; }
+.hero-stat-lbl { font-size: 0.66rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-4); }
+
+/* TABS */
+.tab-nav { background: var(--card); border-bottom: 1px solid var(--line); position: sticky; top: 68px; z-index: 50; }
+.tab-nav-inner { max-width: 720px; margin: 0 auto; padding: 0 32px; display: flex; gap: 4px; }
+.tab-btn { padding: 0 6px; margin-right: 24px; height: 52px; display: flex; align-items: center; gap: 8px; font-size: 0.83rem; font-weight: 600; color: var(--ink-4); background: none; border: none; cursor: pointer; border-bottom: 2px solid transparent; transition: color 0.2s, border-color 0.2s; font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.01em; }
+.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-btn:hover:not(.active) { color: var(--ink-2); }
+.tab-count { background: var(--accent-soft); color: var(--accent); font-size: 0.62rem; font-weight: 700; padding: 2px 8px; border-radius: 100px; border: 1px solid var(--accent-border); }
+
+/* LAYOUT */
+.main { max-width: 720px; margin: 0 auto; padding: 32px 32px 100px; }
+.panel { display: none; }
+.panel.active { display: block; animation: panelIn 0.28s ease both; }
+
+/* FORM CARD */
+.form-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r-xl); overflow: hidden; box-shadow: var(--shadow-card); }
+.card-accent-bar { height: 4px; background: linear-gradient(90deg, var(--accent) 0%, #F5687A 50%, var(--accent-mid) 100%); }
+.form-card-header { padding: 28px 32px 22px; border-bottom: 1px solid var(--line); display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; background: var(--card-2); }
+.form-card-title { font-family: 'Playfair Display', serif; font-size: 1.35rem; color: var(--ink); letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 4px; }
+.form-card-sub { font-size: 0.78rem; color: var(--ink-3); line-height: 1.5; }
+.badge-icon { width: 42px; height: 42px; border-radius: 12px; background: var(--accent-soft); border: 1px solid var(--accent-border); display: flex; align-items: center; justify-content: center; font-size: 1.15rem; flex-shrink: 0; }
+
+.form-body { padding: 28px 32px; }
+.field { margin-bottom: 22px; }
+.field:last-of-type { margin-bottom: 0; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 22px; }
+.field-label { display: flex; align-items: center; gap: 6px; font-size: 0.67rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 8px; }
+.req { color: var(--accent); font-size: 0.75rem; }
+.input-wrap { position: relative; }
+.input-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 0.9rem; opacity: 0.45; pointer-events: none; }
+input[type="text"], input[type="tel"], input[type="number"] { width: 100%; background: var(--page); border: 1.5px solid var(--line-strong); border-radius: var(--r-sm); padding: 12px 14px 12px 40px; font-size: 0.88rem; font-family: 'Plus Jakarta Sans', sans-serif; color: var(--ink); outline: none; transition: border-color 0.18s, box-shadow 0.18s, background 0.18s; letter-spacing: -0.01em; }
+input::placeholder { color: var(--ink-4); font-size: 0.84rem; }
+input:focus { border-color: var(--accent); background: var(--card); box-shadow: 0 0 0 3px rgba(212,36,58,0.07); }
+select { width: 100%; background: var(--page); border: 1.5px solid var(--line-strong); border-radius: var(--r-sm); padding: 12px 14px 12px 40px; font-size: 0.88rem; font-family: 'Plus Jakarta Sans', sans-serif; color: var(--ink); outline: none; transition: border-color 0.18s, box-shadow 0.18s; appearance: none; -webkit-appearance: none; cursor: pointer; }
+select:focus { border-color: var(--accent); background: var(--card); box-shadow: 0 0 0 3px rgba(212,36,58,0.07); }
+.select-arrow { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); font-size: 0.7rem; pointer-events: none; opacity: 0.45; }
+
+/* BLOOD GROUP GRID */
+.blood-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.blood-label { position: relative; cursor: pointer; display: block; }
+.blood-label input[type="checkbox"] { position: absolute; opacity: 0; width: 0; height: 0; }
+.blood-chip { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 14px 6px 11px; border-radius: var(--r-sm); border: 1.5px solid var(--line-strong); background: var(--page); transition: all 0.2s cubic-bezier(.4,0,.2,1); cursor: pointer; position: relative; overflow: hidden; }
+.btype { font-family: 'Playfair Display', serif; font-size: 1.08rem; color: var(--ink-2); line-height: 1; margin-bottom: 5px; transition: color 0.2s; position: relative; }
+.bdot { width: 4px; height: 4px; border-radius: 50%; background: var(--ink-4); transition: background 0.2s; position: relative; }
+.blood-label input:checked ~ .blood-chip { border-color: var(--accent); background: var(--accent); box-shadow: 0 4px 16px rgba(212,36,58,0.3); transform: translateY(-2px); }
+.blood-label input:checked ~ .blood-chip .btype { color: white; }
+.blood-label input:checked ~ .blood-chip .bdot { background: rgba(255,255,255,0.5); }
+.blood-chip:hover { border-color: var(--accent); background: var(--accent-soft); }
+.blood-chip:hover .btype { color: var(--accent); }
+
+/* RADIO BUTTONS for Yes/No */
+.radio-group { display: flex; gap: 10px; }
+.radio-label { position: relative; cursor: pointer; flex: 1; }
+.radio-label input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
+.radio-chip { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 11px 14px; border-radius: var(--r-sm); border: 1.5px solid var(--line-strong); background: var(--page); font-size: 0.84rem; font-weight: 600; color: var(--ink-2); transition: all 0.18s; }
+.radio-label input:checked ~ .radio-chip { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+.radio-chip:hover { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+
+/* ══ ELIGIBILITY RESULT BANNER ══ */
+.elig-result {
+  margin-top: 20px;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  border: 1.5px solid var(--line);
+  display: none;
+  animation: panelIn 0.3s ease both;
+}
+.elig-result.show { display: block; }
+
+.elig-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 16px 20px;
+}
+.elig-icon { font-size: 1.5rem; flex-shrink: 0; }
+.elig-title { font-size: 0.95rem; font-weight: 700; letter-spacing: -0.01em; }
+.elig-sub { font-size: 0.75rem; margin-top: 2px; }
+
+.elig-result.can    { border-color: var(--ok-border); }
+.elig-result.can    .elig-header { background: var(--ok-tint); }
+.elig-result.can    .elig-title  { color: #14532D; }
+.elig-result.can    .elig-sub    { color: #166534; }
+
+.elig-result.wait   { border-color: var(--warn-border); }
+.elig-result.wait   .elig-header { background: var(--warn-tint); }
+.elig-result.wait   .elig-title  { color: #78350F; }
+.elig-result.wait   .elig-sub    { color: #92400E; }
+
+.elig-result.cannot { border-color: var(--accent-border); }
+.elig-result.cannot .elig-header { background: var(--accent-soft); }
+.elig-result.cannot .elig-title  { color: var(--accent-deep); }
+.elig-result.cannot .elig-sub    { color: var(--accent); }
+
+.elig-body { padding: 14px 20px 16px; background: var(--card); }
+.elig-rules { display: flex; flex-direction: column; gap: 8px; }
+.elig-rule {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 0.79rem; color: var(--ink-2); line-height: 1.55;
+}
+.rule-dot {
+  width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.65rem; margin-top: 1px;
+}
+.rule-dot.ok   { background: var(--ok-tint); color: var(--ok); }
+.rule-dot.warn { background: var(--warn-tint); color: var(--warn); }
+.rule-dot.bad  { background: var(--accent-soft); color: var(--accent); }
+
+.elig-next-date {
+  margin-top: 12px; padding: 10px 14px;
+  background: var(--warn-tint); border: 1px solid var(--warn-border);
+  border-radius: var(--r-sm); font-size: 0.77rem;
+  color: #78350F; font-weight: 600; display: none;
+}
+.elig-next-date.show { display: block; }
+
+/* FORM FOOTER */
+.form-footer { padding: 4px 32px 32px; }
+.btn-submit { width: 100%; padding: 16px 24px; background: linear-gradient(135deg, var(--accent) 0%, #E8364C 100%); border: none; border-radius: var(--r-md); color: white; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.01em; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.22s cubic-bezier(.4,0,.2,1); box-shadow: var(--shadow-btn); position: relative; overflow: hidden; }
+.btn-submit::after { content: ''; position: absolute; top: 0; left: -100%; width: 60%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.13), transparent); transition: left 0.5s; }
+.btn-submit:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+.btn-submit:hover::after { left: 160%; }
+.btn-submit:active { transform: translateY(0); }
+.btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+.status-bar { margin-top: 12px; padding: 11px 15px; border-radius: var(--r-sm); font-size: 0.79rem; font-weight: 500; display: none; align-items: center; gap: 8px; line-height: 1.5; }
+.status-bar.error   { background: var(--accent-soft); border: 1px solid var(--accent-border); color: var(--accent); display: flex; }
+.status-bar.success { background: var(--wa-tint); border: 1px solid var(--wa-border); color: #0A7A3C; display: flex; }
+.status-bar.info    { background: #EEF4FF; border: 1px solid rgba(66,133,244,0.2); color: #1A5CC4; display: flex; }
+.gps-tag { display: none; align-items: center; gap: 8px; margin-top: 10px; padding: 10px 14px; background: #EEF4FF; border: 1px solid rgba(66,133,244,0.18); border-radius: var(--r-sm); font-size: 0.75rem; color: #1A5CC4; font-weight: 500; }
+.gps-tag.show { display: flex; }
+
+/* DIVIDER inside form */
+.form-divider { display: flex; align-items: center; gap: 12px; margin: 26px 0 20px; }
+.form-divider span { font-size: 0.64rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-4); white-space: nowrap; }
+.fd-line { flex: 1; height: 1px; background: var(--line); }
+
+/* ELIGIBILITY CHECKER standalone card */
+.elig-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r-xl); overflow: hidden; box-shadow: var(--shadow-card); margin-top: 28px; }
+.elig-card-header { padding: 22px 32px 18px; border-bottom: 1px solid var(--line); background: var(--card-2); display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+.elig-card-title { font-family: 'Playfair Display', serif; font-size: 1.18rem; color: var(--ink); letter-spacing: -0.02em; margin-bottom: 3px; }
+.elig-card-sub { font-size: 0.76rem; color: var(--ink-3); }
+.elig-card-body { padding: 24px 32px; }
+
+/* INFO GRID for eligibility rules page */
+.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 0; }
+.info-tile { border-radius: var(--r-md); padding: 16px 18px; border: 1px solid; }
+.info-tile.green  { background: var(--ok-tint);   border-color: var(--ok-border);   }
+.info-tile.red    { background: var(--accent-soft); border-color: var(--accent-border); }
+.info-tile.yellow { background: var(--warn-tint); border-color: var(--warn-border); }
+.info-tile-head { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
+.info-tile.green  .info-tile-head { color: #166534; }
+.info-tile.red    .info-tile-head { color: var(--accent-deep); }
+.info-tile.yellow .info-tile-head { color: #92400E; }
+.info-tile ul { padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.info-tile ul li { font-size: 0.76rem; color: var(--ink-2); display: flex; align-items: flex-start; gap: 7px; line-height: 1.5; }
+.info-tile ul li::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+.info-tile.green  ul li::before { background: var(--ok); }
+.info-tile.red    ul li::before { background: var(--accent); }
+.info-tile.yellow ul li::before { background: var(--warn); }
+.info-tile.full { grid-column: 1 / -1; }
+
+/* SEARCH PANEL */
+.search-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r-xl); overflow: hidden; box-shadow: var(--shadow-card); margin-bottom: 24px; }
+.search-card-header { padding: 22px 28px 18px; border-bottom: 1px solid var(--line); background: var(--card-2); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.search-card-title { font-family: 'Playfair Display', serif; font-size: 1.18rem; color: var(--ink); letter-spacing: -0.02em; margin-bottom: 3px; }
+.search-card-sub { font-size: 0.76rem; color: var(--ink-3); }
+.search-body { padding: 22px 28px; }
+.search-group { margin-bottom: 20px; }
+.search-lbl { font-size: 0.66rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 9px; display: block; }
+.search-row { display: flex; gap: 9px; }
+.search-input-wrap { flex: 1; position: relative; }
+.search-input-icon { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); font-size: 0.85rem; opacity: 0.4; pointer-events: none; }
+.search-input { width: 100%; background: var(--page); border: 1.5px solid var(--line-strong); border-radius: var(--r-sm); padding: 11px 14px 11px 38px; font-size: 0.87rem; font-family: 'Plus Jakarta Sans', sans-serif; color: var(--ink); outline: none; transition: border-color 0.18s, box-shadow 0.18s, background 0.18s; }
+.search-input::placeholder { color: var(--ink-4); font-size: 0.83rem; }
+.search-input:focus { border-color: var(--accent); background: var(--card); box-shadow: 0 0 0 3px rgba(212,36,58,0.07); }
+.btn-locate { padding: 11px 16px; background: var(--page); border: 1.5px solid var(--line-strong); border-radius: var(--r-sm); color: var(--ink-2); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.8rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 5px; transition: all 0.18s; white-space: nowrap; }
+.btn-locate:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+.divider-label { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.divider-label span { font-size: 0.64rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-4); white-space: nowrap; }
+.dl-line { flex: 1; height: 1px; background: var(--line); }
+.filter-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+.filter-label { position: relative; cursor: pointer; }
+.filter-label input[type="checkbox"] { position: absolute; opacity: 0; width: 0; height: 0; }
+.f-chip { display: inline-flex; align-items: center; padding: 6px 14px; border-radius: 100px; border: 1.5px solid var(--line-strong); background: var(--card); color: var(--ink-2); font-size: 0.77rem; font-weight: 600; transition: all 0.16s; user-select: none; font-family: 'Plus Jakarta Sans', sans-serif; }
+.filter-label input:checked ~ .f-chip { background: var(--accent); border-color: var(--accent); color: white; box-shadow: 0 2px 10px rgba(212,36,58,0.22); }
+.f-chip:hover { border-color: var(--accent); color: var(--accent); }
+.btn-all { display: inline-flex; align-items: center; padding: 6px 14px; border-radius: 100px; border: 1.5px solid var(--line-strong); background: var(--card); color: var(--ink-2); font-size: 0.77rem; font-weight: 600; cursor: pointer; transition: all 0.16s; font-family: 'Plus Jakarta Sans', sans-serif; }
+.btn-all.active { background: var(--ink); border-color: var(--ink); color: white; }
+
+/* RESULTS */
+.results-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; padding: 0 2px; }
+.results-count { font-size: 0.77rem; font-weight: 500; color: var(--ink-3); }
+.results-count strong { color: var(--ink); font-weight: 700; }
+.donor-list { display: flex; flex-direction: column; gap: 12px; }
+
+/* DONOR CARD */
+.donor-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r-lg); overflow: hidden; transition: all 0.22s cubic-bezier(.4,0,.2,1); animation: cardIn 0.3s ease both; box-shadow: 0 1px 0 var(--line), 0 2px 16px rgba(28,22,20,0.05); }
+.donor-card:hover { border-color: var(--accent-border); box-shadow: 0 0 0 1px var(--accent-border), 0 8px 32px rgba(212,36,58,0.1); transform: translateY(-2px); }
+.donor-card-top { padding: 18px 20px 16px 20px; display: grid; grid-template-columns: 58px 1fr auto; align-items: center; gap: 16px; }
+.donor-avatar { width: 58px; height: 58px; border-radius: 14px; background: linear-gradient(135deg, var(--accent) 0%, #F04A60 100%); display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 14px rgba(212,36,58,0.28); position: relative; }
+.donor-avatar::after { content: ''; position: absolute; inset: 1px; border-radius: 13px; border: 1px solid rgba(255,255,255,0.2); }
+.d-blood { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: white; line-height: 1; letter-spacing: -0.01em; }
+.donor-name { font-size: 0.94rem; font-weight: 700; color: var(--ink); margin-bottom: 7px; letter-spacing: -0.01em; }
+.d-row { display: flex; flex-direction: column; gap: 4px; }
+.d-item { display: flex; align-items: center; gap: 6px; font-size: 0.74rem; color: var(--ink-3); }
+.d-icon { font-size: 0.72rem; width: 15px; text-align: center; opacity: 0.65; flex-shrink: 0; }
+.donor-aside { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.dist-pill { display: inline-flex; align-items: center; gap: 4px; padding: 5px 11px; border-radius: 100px; background: var(--accent-soft); border: 1px solid var(--accent-border); font-size: 0.69rem; font-weight: 700; color: var(--accent); white-space: nowrap; }
+.avail-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 0.65rem; font-weight: 600; color: #1A8A4A; }
+.avail-dot { width: 7px; height: 7px; background: #22C55E; border-radius: 50%; box-shadow: 0 0 8px rgba(34,197,94,0.55); }
+.donor-actions { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--line); background: var(--card-2); }
+.btn-action { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 16px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.79rem; font-weight: 700; border: none; cursor: pointer; text-decoration: none; transition: all 0.18s; letter-spacing: 0.01em; }
+.btn-call { background: transparent; color: var(--accent); border-right: 1px solid var(--line); }
+.btn-call:hover { background: var(--accent); color: white; }
+.btn-call svg { width: 14px; height: 14px; flex-shrink: 0; }
+.btn-whatsapp { background: transparent; color: #1A8A4A; }
+.btn-whatsapp:hover { background: var(--wa); color: white; }
+.btn-whatsapp svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+/* EMPTY STATE */
+.empty-state { text-align: center; padding: 60px 24px; background: var(--card); border: 1px dashed var(--line-strong); border-radius: var(--r-lg); }
+.empty-icon { font-size: 2.4rem; margin-bottom: 14px; opacity: 0.35; }
+.empty-title { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--ink-2); margin-bottom: 6px; }
+.empty-sub { font-size: 0.8rem; color: var(--ink-4); line-height: 1.6; }
+
+/* SUCCESS OVERLAY */
+.overlay { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(28,22,20,0.45); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); align-items: center; justify-content: center; padding: 24px; }
+.overlay.show { display: flex; animation: fadeIn 0.22s ease both; }
+.overlay-card { background: var(--card); border-radius: var(--r-xl); padding: 48px 36px 36px; max-width: 380px; width: 100%; text-align: center; animation: modalIn 0.35s cubic-bezier(.34,1.56,.64,1) both; box-shadow: 0 32px 80px rgba(28,22,20,0.2), 0 0 0 1px var(--line); }
+.o-icon { width: 72px; height: 72px; background: linear-gradient(135deg, var(--accent) 0%, #F04A60 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 22px; font-size: 1.8rem; box-shadow: 0 10px 30px rgba(212,36,58,0.32); }
+.o-title { font-family: 'Playfair Display', serif; font-size: 1.75rem; color: var(--ink); letter-spacing: -0.025em; margin-bottom: 10px; }
+.o-msg { font-size: 0.83rem; color: var(--ink-3); margin-bottom: 30px; line-height: 1.7; }
+.btn-done { width: 100%; padding: 15px; background: linear-gradient(135deg, var(--accent) 0%, #E8364C 100%); border: none; border-radius: var(--r-md); color: white; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.2s; box-shadow: var(--shadow-btn); }
+.btn-done:hover { transform: translateY(-1px); box-shadow: var(--shadow-hover); }
+
+/* ANIMATIONS */
+@keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.6); } }
+@keyframes panelIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes cardIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes modalIn { from { opacity: 0; transform: scale(0.86) translateY(24px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  .hero-inner { flex-direction: column; align-items: flex-start; }
+  .hero-stat { display: none; }
+  .field-row { grid-template-columns: 1fr; }
+  .blood-grid { grid-template-columns: repeat(4,1fr); }
+  .header-inner, .tab-nav-inner, .main { padding-left: 18px; padding-right: 18px; }
+  .hero { padding: 28px 18px 24px; }
+  .form-card-header, .form-body, .form-footer { padding-left: 20px; padding-right: 20px; }
+  .search-card-header, .search-body { padding-left: 18px; padding-right: 18px; }
+  .info-grid { grid-template-columns: 1fr; }
+  .elig-card-header, .elig-card-body { padding-left: 20px; padding-right: 20px; }
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-mark">
+        <svg viewBox="0 0 18 18" fill="none"><path d="M9 2.5C9 2.5 3 8.6 3 12a6 6 0 0012 0C15 8.6 9 2.5 9 2.5z" fill="white"/></svg>
+      </span>
+      <span class="logo-text">Blood<em>Link</em></span>
+    </div>
+    <div class="live-pill">
+      <span class="live-dot"></span>
+      <span class="live-text">Live Network</span>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <div class="hero-eyebrow">🩸 Tamil Nadu Donor Network</div>
+      <div class="hero-headline">Every drop<br><span>saves a life.</span></div>
+      <div class="hero-sub">Connect with verified blood donors across your district — fast, free, and trusted.</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num" id="heroCount">8</div>
+      <div class="hero-stat-lbl">Active<br>Donors</div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB NAV -->
+<nav class="tab-nav">
+  <div class="tab-nav-inner">
+    <button class="tab-btn active" onclick="switchTab('eligibility',this)">✅&nbsp; Am I Eligible?</button>
+    <button class="tab-btn" onclick="switchTab('register',this)">🩸&nbsp; Register as Donor</button>
+    <button class="tab-btn" onclick="switchTab('nearby',this)">🔍&nbsp; Find Nearby <span class="tab-count" id="tabCount">8</span></button>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- ══ REGISTER PANEL ══ -->
+  <div id="reg-panel" class="panel">
+    <div class="form-card">
+      <div class="card-accent-bar"></div>
+      <div class="form-card-header">
+        <div>
+          <div class="form-card-title">Donor Registration</div>
+          <div class="form-card-sub">Your details are secure and shared only when a match is needed.</div>
+        </div>
+        <div class="badge-icon">🩸</div>
+      </div>
+
+      <div class="form-body">
+        <div class="field-row">
+          <div class="field">
+            <div class="field-label">Full Name <span class="req">*</span></div>
+            <div class="input-wrap">
+              <span class="input-icon">👤</span>
+              <input type="text" id="fname" placeholder="e.g. Priya Subramaniam" autocomplete="name"/>
+            </div>
+          </div>
+          <div class="field">
+            <div class="field-label">Phone Number <span class="req">*</span></div>
+            <div class="input-wrap">
+              <span class="input-icon">📞</span>
+              <input type="tel" id="fphone" placeholder="10-digit mobile" maxlength="10" autocomplete="tel"/>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <div class="field-label">Area / Locality <span class="req">*</span></div>
+          <div class="input-wrap">
+            <span class="input-icon">📍</span>
+            <input type="text" id="farea" placeholder="e.g. Anna Nagar, Chennai or Neyveli"/>
+          </div>
+        </div>
+        <div class="field">
+          <div class="field-label">Blood Group <span class="req">*</span></div>
+          <div class="blood-grid">
+            <label class="blood-label"><input type="checkbox" name="bReg" value="O+"  onchange="singleBlood(this)"><span class="blood-chip"><span class="btype">O+</span><span class="bdot"></span></span></label>
+            <label class="blood-label"><input type="checkbox" name="bReg" value="A+"  onchange="singleBlood(this)"><span class="blood-chip"><span class="btype">A+</span><span class="bdot"></span></span></label>
+            <label class="blood-label"><input type="checkbox" name="bReg" value="B+"  onchange="singleBlood(this)"><span class="blood-chip"><span class="btype">B+</span><span class="bdot"></span></span></label>
+            <label class="blood-label"><input type="checkbox" name="bReg" value="AB+" onchange="singleBlood(this)"><span class="blood-chip"><span class="btype">AB+</span><span class="bdot"></span></span></label>
+            <label class="blood-label"><input type="checkbox" name="bReg" value="O−"  onchange="singleBlood(this)"><span class="blood-chip"><span class="btype">O−</span><span class="bdot"></span></span></label>
+            <label class="blood-label"><input type="checkbox" name="bReg" value="A−"  onchange="singleBlood(this)"><span class="blood-chip"><span class="btype">A−</span><span class="bdot"></span></span></label>
+            <label class="blood-label"><input type="checkbox" name="bReg" value="B−"  onchange="singleBlood(this)"><span class="blood-chip"><span class="btype">B−</span><span class="bdot"></span></span></label>
+            <label class="blood-label"><input type="checkbox" name="bReg" value="AB−" onchange="singleBlood(this)"><span class="blood-chip"><span class="btype">AB−</span><span class="bdot"></span></span></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-footer">
+        <button class="btn-submit" id="regBtn" onclick="doRegister()">
+          <span>📍</span> Register with GPS Location
+        </button>
+        <div class="gps-tag" id="gpsTag">📡 <span id="gpsText"></span></div>
+        <div class="status-bar" id="statusMsg"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ FIND NEARBY PANEL ══ -->
+  <div id="near-panel" class="panel">
+    <div class="search-card">
+      <div class="card-accent-bar"></div>
+      <div class="search-card-header">
+        <div>
+          <div class="search-card-title">Find Donors Near You</div>
+          <div class="search-card-sub">Search by area and filter by blood group</div>
+        </div>
+        <div class="badge-icon">🔍</div>
+      </div>
+      <div class="search-body">
+        <div class="search-group">
+          <span class="search-lbl">Location or Area</span>
+          <div class="search-row">
+            <div class="search-input-wrap">
+              <span class="search-input-icon">📍</span>
+              <input class="search-input" type="text" id="locQ" placeholder="City, area, or district..." oninput="applyFilters()"/>
+            </div>
+            <button class="btn-locate" id="locBtn" onclick="useGPS()">📡 Near Me</button>
+          </div>
+        </div>
+        <div class="divider-label">
+          <div class="dl-line"></div><span>Filter by blood group</span><div class="dl-line"></div>
+        </div>
+        <div class="filter-wrap">
+          <button class="btn-all active" id="allBtn" onclick="clearFilters()">All Types</button>
+          <label class="filter-label"><input type="checkbox" class="bF" value="O+"  onchange="applyFilters()"><span class="f-chip">O+</span></label>
+          <label class="filter-label"><input type="checkbox" class="bF" value="A+"  onchange="applyFilters()"><span class="f-chip">A+</span></label>
+          <label class="filter-label"><input type="checkbox" class="bF" value="B+"  onchange="applyFilters()"><span class="f-chip">B+</span></label>
+          <label class="filter-label"><input type="checkbox" class="bF" value="AB+" onchange="applyFilters()"><span class="f-chip">AB+</span></label>
+          <label class="filter-label"><input type="checkbox" class="bF" value="O−"  onchange="applyFilters()"><span class="f-chip">O−</span></label>
+          <label class="filter-label"><input type="checkbox" class="bF" value="A−"  onchange="applyFilters()"><span class="f-chip">A−</span></label>
+          <label class="filter-label"><input type="checkbox" class="bF" value="B−"  onchange="applyFilters()"><span class="f-chip">B−</span></label>
+          <label class="filter-label"><input type="checkbox" class="bF" value="AB−" onchange="applyFilters()"><span class="f-chip">AB−</span></label>
+        </div>
+      </div>
+    </div>
+    <div class="results-meta">
+      <span class="results-count" id="resCount"><strong>8</strong> donors found</span>
+    </div>
+    <div class="donor-list" id="donorList"></div>
+  </div>
+
+  <!-- ══ ELIGIBILITY PANEL ══ -->
+  <div id="elig-panel" class="panel active">
+
+    <!-- Eligibility Checker Form -->
+    <div class="form-card">
+      <div class="card-accent-bar"></div>
+      <div class="form-card-header">
+        <div>
+          <div class="form-card-title">Eligibility Checker</div>
+          <div class="form-card-sub">Find out if you are currently eligible to donate blood.</div>
+        </div>
+        <div class="badge-icon">✅</div>
+      </div>
+
+      <div class="form-body">
+
+        <!-- Age & Weight -->
+        <div class="field-row">
+          <div class="field">
+            <div class="field-label">Your Age <span class="req">*</span></div>
+            <div class="input-wrap">
+              <span class="input-icon">🎂</span>
+              <input type="number" id="eAge" placeholder="e.g. 28" min="1" max="100" oninput="checkElig()"/>
+            </div>
+          </div>
+          <div class="field">
+            <div class="field-label">Body Weight (kg) <span class="req">*</span></div>
+            <div class="input-wrap">
+              <span class="input-icon">⚖️</span>
+              <input type="number" id="eWeight" placeholder="e.g. 55" min="1" max="300" oninput="checkElig()"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- Last Donation -->
+        <div class="field">
+          <div class="field-label">When did you last donate blood?</div>
+          <div class="input-wrap">
+            <span class="input-icon">📅</span>
+            <select id="eLastDonation" onchange="checkElig()" style="padding-left:40px">
+              <option value="">-- Select an option --</option>
+              <option value="never">Never donated before (First time)</option>
+              <option value="less3">Less than 3 months ago</option>
+              <option value="3to6">3 – 6 months ago</option>
+              <option value="more6">6 மாதங்களுக்கும் மேல்</option>
+            </select>
+            <span class="select-arrow">▼</span>
+          </div>
+        </div>
+
+        <!-- Health Questions -->
+        <div class="form-divider"><div class="fd-line"></div><span>Health Questions</span><div class="fd-line"></div></div>
+
+        <!-- Fever -->
+        <div class="field">
+          <div class="field-label">Had fever or cold in the last 1 week?</div>
+          <div class="radio-group">
+            <label class="radio-label"><input type="radio" name="eFever" value="yes" onchange="checkElig()"><span class="radio-chip">🤒 Yes</span></label>
+            <label class="radio-label"><input type="radio" name="eFever" value="no"  onchange="checkElig()"><span class="radio-chip">😊 No</span></label>
+          </div>
+        </div>
+
+        <!-- Diabetes -->
+        <div class="field">
+          <div class="field-label">Are you a Diabetic taking Insulin?</div>
+          <div class="radio-group">
+            <label class="radio-label"><input type="radio" name="eInsulin" value="yes" onchange="checkElig()"><span class="radio-chip">💉 Yes</span></label>
+            <label class="radio-label"><input type="radio" name="eInsulin" value="no"  onchange="checkElig()"><span class="radio-chip">🙅 No</span></label>
+          </div>
+        </div>
+
+        <!-- Medications -->
+        <div class="field">
+          <div class="field-label">Currently taking Antibiotics or Blood thinners?</div>
+          <div class="radio-group">
+            <label class="radio-label"><input type="radio" name="eMeds" value="yes" onchange="checkElig()"><span class="radio-chip">💊 Yes</span></label>
+            <label class="radio-label"><input type="radio" name="eMeds" value="no"  onchange="checkElig()"><span class="radio-chip">🙅 No</span></label>
+          </div>
+        </div>
+
+        <!-- Tattoo / Piercing -->
+        <div class="field">
+          <div class="field-label">Got a Tattoo, Piercing, or Surgery in the last 6 months?</div>
+          <div class="radio-group">
+            <label class="radio-label"><input type="radio" name="eTattoo" value="yes" onchange="checkElig()"><span class="radio-chip">🩹 Yes</span></label>
+            <label class="radio-label"><input type="radio" name="eTattoo" value="no"  onchange="checkElig()"><span class="radio-chip">🙅 No</span></label>
+          </div>
+        </div>
+
+        <!-- Pregnancy -->
+        <div class="field">
+          <div class="field-label">Are you pregnant or currently breastfeeding?</div>
+          <div class="radio-group">
+            <label class="radio-label"><input type="radio" name="ePreg" value="yes" onchange="checkElig()"><span class="radio-chip">🤰 Yes</span></label>
+            <label class="radio-label"><input type="radio" name="ePreg" value="no"  onchange="checkElig()"><span class="radio-chip">🙅 No</span></label>
+          </div>
+        </div>
+
+        <!-- HIV / Hepatitis -->
+        <div class="field">
+          <div class="field-label">Have you had HIV, Hepatitis B/C, or Malaria (in last 3 months)?</div>
+          <div class="radio-group">
+            <label class="radio-label"><input type="radio" name="eHiv" value="yes" onchange="checkElig()"><span class="radio-chip">🦠 Yes</span></label>
+            <label class="radio-label"><input type="radio" name="eHiv" value="no"  onchange="checkElig()"><span class="radio-chip">🙅 No</span></label>
+          </div>
+        </div>
+
+        <!-- RESULT BOX -->
+        <div class="elig-result" id="eligResult">
+          <div class="elig-header">
+            <span class="elig-icon" id="eligIcon"></span>
+            <div>
+              <div class="elig-title" id="eligTitle"></div>
+              <div class="elig-sub" id="eligSub"></div>
+            </div>
+          </div>
+          <div class="elig-body">
+            <div class="elig-rules" id="eligRules"></div>
+            <div class="elig-next-date" id="eligNextDate"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Static Rules Reference -->
+    <div class="elig-card" style="margin-top:28px">
+      <div class="card-accent-bar"></div>
+      <div class="elig-card-header">
+        <div>
+          <div class="elig-card-title">Blood Donation Rules — Quick Reference</div>
+          <div class="elig-card-sub">Who can donate, who cannot, and when to wait</div>
+        </div>
+        <div class="badge-icon">📋</div>
+      </div>
+      <div class="elig-card-body">
+        <div class="info-grid">
+
+          <div class="info-tile green">
+            <div class="info-tile-head">✅ CAN DONATE</div>
+            <ul>
+              <li>Age 18 – 65 years</li>
+              <li>Weight at least 45 kg</li>
+              <li>In good health</li>
+              <li>Last donation was 3+ months ago (Whole blood)</li>
+              <li>Well-rested and had a meal before donating</li>
+              <li>Hemoglobin ≥ 12.5 g/dL (Women), ≥ 13 g/dL (Men)</li>
+            </ul>
+          </div>
+
+          <div class="info-tile red">
+            <div class="info-tile-head">❌ CANNOT DONATE</div>
+            <ul>
+              <li>Age below 18 or above 65</li>
+              <li>Weight below 45 kg</li>
+              <li>Insulin-dependent Diabetics</li>
+              <li>HIV, Hepatitis B/C positive</li>
+              <li>Pregnant women or breastfeeding mothers</li>
+              <li>On Blood thinners (Warfarin, Aspirin)</li>
+              <li>Heart disease or Cancer patients</li>
+              <li>Within 24 hours of consuming alcohol</li>
+            </ul>
+          </div>
+
+          <div class="info-tile yellow">
+            <div class="info-tile-head">⏳ WAIT PERIOD</div>
+            <ul>
+              <li>Fever / Cold — <strong>7 days</strong> after recovery</li>
+              <li>Tattoo / Piercing — <strong>6 months</strong></li>
+              <li>Surgery — <strong>6 months</strong></li>
+              <li>Malaria — <strong>3 months</strong> after recovery</li>
+              <li>Typhoid — <strong>1 year</strong> after recovery</li>
+              <li>Antibiotics — <strong>7 days</strong> after stopping</li>
+              <li>Delivery / Miscarriage — <strong>6 months</strong></li>
+              <li>Between Whole Blood donations — <strong>3 months</strong> (90 days)</li>
+            </ul>
+          </div>
+
+          <div class="info-tile green full">
+            <div class="info-tile-head">💡 Donation Types — How often can you donate?</div>
+            <ul style="display:grid;grid-template-columns:1fr 1fr;gap:6px 20px">
+              <li>Whole Blood — 90 days (3 months)</li>
+              <li>Platelets — 7 days (max 24 times/year)</li>
+              <li>Plasma — 28 days</li>
+              <li>Double Red Cells — 112 days</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end elig-panel -->
+
+</main>
+
+<!-- SUCCESS OVERLAY -->
+<div class="overlay" id="overlay">
+  <div class="overlay-card">
+    <div class="o-icon">❤️</div>
+    <div class="o-title">You're registered!</div>
+    <p class="o-msg" id="oMsg">Your details have been added to the BloodLink network.</p>
+    <button class="btn-done" onclick="closeOverlay()">Done</button>
+  </div>
+</div>
+
+<script>
+let donors = [
+  { name:"Ravi Kumar",   blood:"O+",  phone:"9876543210", area:"Anna Nagar, Chennai",  dist:"0.8 km" },
+  { name:"Priya S.",     blood:"A+",  phone:"8765432109", area:"T. Nagar, Chennai",    dist:"1.2 km" },
+  { name:"Arjun M.",     blood:"B+",  phone:"9012345678", area:"Velachery, Chennai",   dist:"2.0 km" },
+  { name:"Deepa R.",     blood:"AB+", phone:"9443210987", area:"Neyveli, Cuddalore",   dist:"2.5 km" },
+  { name:"Karthik N.",   blood:"O−",  phone:"7654321098", area:"Tambaram, Chennai",    dist:"3.1 km" },
+  { name:"Meena L.",     blood:"A−",  phone:"9988776655", area:"Coimbatore North",     dist:"4.3 km" },
+  { name:"Suresh P.",    blood:"B−",  phone:"9123456780", area:"Salem Town",           dist:"5.0 km" },
+  { name:"Anitha V.",    blood:"AB−", phone:"9876012345", area:"Madurai Central",      dist:"6.2 km" },
+];
+
+let selBlood = '';
+
+function singleBlood(cb) {
+  document.querySelectorAll('input[name="bReg"]').forEach(c => { if(c!==cb) c.checked=false; });
+  selBlood = cb.checked ? cb.value : '';
+}
+
+function setStatus(type, msg) {
+  const el = document.getElementById('statusMsg');
+  el.className = 'status-bar '+type;
+  const ico = {error:'⚠️',success:'✅',info:'ℹ️'}[type]||'';
+  el.innerHTML = ico+'&nbsp;'+msg;
+}
+
+function doRegister() {
+  const name  = document.getElementById('fname').value.trim();
+  const phone = document.getElementById('fphone').value.trim();
+  const area  = document.getElementById('farea').value.trim();
+  const btn   = document.getElementById('regBtn');
+  if(!name)           { setStatus('error','Please enter your full name.'); return; }
+  if(phone.length<10) { setStatus('error','Please enter a valid 10-digit phone number.'); return; }
+  if(!area)           { setStatus('error','Please enter your area or locality.'); return; }
+  if(!selBlood)       { setStatus('error','Please select a blood group.'); return; }
+  btn.disabled=true;
+  btn.innerHTML='<span>⏳</span> Getting Location...';
+  setStatus('info','Requesting GPS coordinates...');
+  if(!navigator.geolocation){ finishReg(name,phone,area,null); return; }
+  navigator.geolocation.getCurrentPosition(
+    pos=>{
+      const c=`${pos.coords.latitude.toFixed(5)}, ${pos.coords.longitude.toFixed(5)}`;
+      document.getElementById('gpsText').textContent='GPS locked · '+c;
+      document.getElementById('gpsTag').classList.add('show');
+      finishReg(name,phone,area,c);
+    },
+    ()=>finishReg(name,phone,area,null),
+    {timeout:10000,enableHighAccuracy:true}
+  );
+}
+
+function finishReg(name,phone,area,coords) {
+  const btn=document.getElementById('regBtn');
+  donors.unshift({name,blood:selBlood,phone,area,dist:'0.0 km'});
+  const n=donors.length;
+  document.getElementById('tabCount').textContent=n;
+  document.getElementById('heroCount').textContent=n;
+  document.getElementById('oMsg').textContent=`${name} · ${selBlood} · ${area} — successfully added to BloodLink.`;
+  document.getElementById('overlay').classList.add('show');
+  btn.disabled=false;
+  btn.innerHTML='<span>📍</span> Register with GPS Location';
+  ['fname','fphone','farea'].forEach(id=>document.getElementById(id).value='');
+  document.querySelectorAll('input[name="bReg"]').forEach(c=>c.checked=false);
+  selBlood='';
+  document.getElementById('statusMsg').className='status-bar';
+}
+
+function closeOverlay(){ document.getElementById('overlay').classList.remove('show'); }
+
+function switchTab(tab,el){
+  document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('reg-panel').className  = tab==='register'   ? 'panel active' : 'panel';
+  document.getElementById('near-panel').className = tab==='nearby'     ? 'panel active' : 'panel';
+  document.getElementById('elig-panel').className = tab==='eligibility'? 'panel active' : 'panel';
+  if(tab==='nearby') applyFilters();
+}
+
+function applyFilters(){
+  const q=(document.getElementById('locQ').value||'').trim().toLowerCase();
+  const bs=[...document.querySelectorAll('.bF:checked')].map(c=>c.value);
+  document.getElementById('allBtn').classList.toggle('active',bs.length===0);
+  let res=donors;
+  if(q) res=res.filter(d=>d.area.toLowerCase().includes(q)||d.name.toLowerCase().includes(q));
+  if(bs.length) res=res.filter(d=>bs.includes(d.blood));
+  const parts=[];
+  if(q) parts.push(`"${q}"`);
+  if(bs.length) parts.push(bs.join(', '));
+  const note=parts.length?' &middot; '+parts.join(' &middot; '):'';
+  document.getElementById('resCount').innerHTML=`<strong>${res.length}</strong> donor${res.length!==1?'s':''} found${note}`;
+  renderDonors(res);
+}
+
+function clearFilters(){
+  document.querySelectorAll('.bF').forEach(c=>c.checked=false);
+  applyFilters();
+}
+
+function useGPS(){
+  const btn=document.getElementById('locBtn');
+  btn.innerHTML='⏳'; btn.disabled=true;
+  if(!navigator.geolocation){ alert('Geolocation not supported.'); btn.innerHTML='📡 Near Me'; btn.disabled=false; return; }
+  navigator.geolocation.getCurrentPosition(
+    pos=>{
+      document.getElementById('locQ').value=`${pos.coords.latitude.toFixed(3)}, ${pos.coords.longitude.toFixed(3)}`;
+      btn.innerHTML='📡 Near Me'; btn.disabled=false; applyFilters();
+    },
+    ()=>{ alert('Could not get location. Please enter manually.'); btn.innerHTML='📡 Near Me'; btn.disabled=false; },
+    {timeout:8000}
+  );
+}
+
+function waMsg(d){
+  return encodeURIComponent(`Hi ${d.name}, I found your contact on BloodLink. I urgently need ${d.blood} blood. Can you please help? 🙏`);
+}
+
+function renderDonors(list){
+  const c=document.getElementById('donorList');
+  if(!list.length){
+    c.innerHTML=`<div class="empty-state"><div class="empty-icon">🔍</div><div class="empty-title">No donors found</div><div class="empty-sub">Try a different area or adjust your blood group filter.</div></div>`;
+    return;
+  }
+  c.innerHTML=list.map((d,i)=>`
+    <div class="donor-card" style="animation-delay:${i*0.055}s">
+      <div class="donor-card-top">
+        <div class="donor-avatar"><span class="d-blood">${d.blood}</span></div>
+        <div class="donor-info">
+          <div class="donor-name">${d.name}</div>
+          <div class="d-row">
+            <div class="d-item"><span class="d-icon">📞</span>${d.phone}</div>
+            <div class="d-item"><span class="d-icon">📍</span>${d.area}</div>
+          </div>
+        </div>
+        <div class="donor-aside">
+          <div class="dist-pill">📍 ${d.dist}</div>
+          <div class="avail-badge"><span class="avail-dot"></span>Available</div>
+        </div>
+      </div>
+      <div class="donor-actions">
+        <a class="btn-action btn-call" href="tel:+91${d.phone}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8 19.79 19.79 0 01.22 2.18 2 2 0 012.18 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.16 6.16l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+          </svg>
+          Call Now
+        </a>
+        <a class="btn-action btn-whatsapp" href="https://wa.me/91${d.phone}?text=${waMsg(d)}" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+          </svg>
+          WhatsApp
+        </a>
+      </div>
+    </div>`).join('');
+}
+
+/* ══════════════════════════════════════
+   ELIGIBILITY CHECKER LOGIC
+══════════════════════════════════════ */
+function getRadio(name){
+  const el = document.querySelector(`input[name="${name}"]:checked`);
+  return el ? el.value : null;
+}
+
+function checkElig(){
+  const age    = parseInt(document.getElementById('eAge').value)||0;
+  const weight = parseInt(document.getElementById('eWeight').value)||0;
+  const lastD  = document.getElementById('eLastDonation').value;
+  const fever  = getRadio('eFever');
+  const insulin= getRadio('eInsulin');
+  const meds   = getRadio('eMeds');
+  const tattoo = getRadio('eTattoo');
+  const preg   = getRadio('ePreg');
+  const hiv    = getRadio('eHiv');
+
+  // Need at least age + weight to show result
+  if(!age || !weight) { hideResult(); return; }
+
+  const rules  = []; // {status:'ok'|'warn'|'bad', text:str}
+  let verdict  = 'can';   // can | wait | cannot
+  let nextDateMsg = '';
+
+  // ── AGE ──
+  if(age < 18){
+    rules.push({s:'bad', t:`Age ${age} — Minimum age to donate is 18.`});
+    verdict = 'cannot';
+  } else if(age > 65){
+    rules.push({s:'bad', t:`Age ${age} — Maximum age limit for donation is 65.`});
+    verdict = 'cannot';
+  } else {
+    rules.push({s:'ok', t:`Age ${age} — Within eligible range ✓ (18–65)`});
+  }
+
+  // ── WEIGHT ──
+  if(weight < 45){
+    rules.push({s:'bad', t:`Weight ${weight} kg — Minimum weight required is 45 kg.`});
+    verdict = 'cannot';
+  } else {
+    rules.push({s:'ok', t:`Weight ${weight} kg — Meets the minimum requirement ✓`});
+  }
+
+  // ── LAST DONATION ──
+  if(lastD === 'less3'){
+    rules.push({s:'bad', t:`Last donation was less than 3 months ago — Whole blood requires a 90-day gap.`});
+    if(verdict !== 'cannot') verdict = 'wait';
+    nextDateMsg = '⏳ Please wait at least 3 months (90 days) since your last donation before donating again.';
+  } else if(lastD === 'never' || lastD === '3to6' || lastD === 'more6' || lastD === ''){
+    if(lastD === '3to6' || lastD === 'more6'){
+      rules.push({s:'ok', t:`Enough time has passed since your last donation ✓`});
+    }
+  }
+
+  // ── FEVER ──
+  if(fever === 'yes'){
+    rules.push({s:'warn', t:`Fever / Cold — Must wait 7 days after full recovery before donating.`});
+    if(verdict === 'can') verdict = 'wait';
+    if(!nextDateMsg) nextDateMsg = '⏳ Please wait 7 days after your fever/cold has fully cleared.';
+  } else if(fever === 'no'){
+    rules.push({s:'ok', t:`No fever or cold ✓`});
+  }
+
+  // ── INSULIN ──
+  if(insulin === 'yes'){
+    rules.push({s:'bad', t:`Insulin-dependent Diabetics are permanently ineligible to donate blood.`});
+    verdict = 'cannot';
+  } else if(insulin === 'no'){
+    rules.push({s:'ok', t:`Not on Insulin ✓`});
+  }
+
+  // ── MEDICATIONS ──
+  if(meds === 'yes'){
+    rules.push({s:'warn', t:`Antibiotics / Blood thinners — Must wait 7 days after stopping the medication.`});
+    if(verdict === 'can') verdict = 'wait';
+    if(!nextDateMsg) nextDateMsg = '⏳ Please wait 7 days after finishing your medication before donating.';
+  } else if(meds === 'no'){
+    rules.push({s:'ok', t:`Not on any restricted medications ✓`});
+  }
+
+  // ── TATTOO ──
+  if(tattoo === 'yes'){
+    rules.push({s:'warn', t:`Tattoo / Piercing / Surgery — Must wait 6 months before donating.`});
+    if(verdict === 'can') verdict = 'wait';
+    if(!nextDateMsg) nextDateMsg = '⏳ Please wait 6 months after your Tattoo, Piercing, or Surgery before donating.';
+  } else if(tattoo === 'no'){
+    rules.push({s:'ok', t:`No recent Tattoo, Piercing, or Surgery ✓`});
+  }
+
+  // ── PREGNANCY ──
+  if(preg === 'yes'){
+    rules.push({s:'bad', t:`Pregnant or breastfeeding — Cannot donate blood at this time.`});
+    verdict = 'cannot';
+  } else if(preg === 'no'){
+    rules.push({s:'ok', t:`Not pregnant or breastfeeding ✓`});
+  }
+
+  // ── HIV / HEPATITIS ──
+  if(hiv === 'yes'){
+    rules.push({s:'bad', t:`HIV / Hepatitis / Malaria — Cannot donate blood.`});
+    verdict = 'cannot';
+  } else if(hiv === 'no'){
+    rules.push({s:'ok', t:`No HIV, Hepatitis, or Malaria ✓`});
+  }
+
+  showResult(verdict, rules, nextDateMsg);
+}
+
+function hideResult(){
+  document.getElementById('eligResult').classList.remove('show');
+}
+
+function showResult(verdict, rules, nextDateMsg){
+  const box   = document.getElementById('eligResult');
+  const icon  = document.getElementById('eligIcon');
+  const title = document.getElementById('eligTitle');
+  const sub   = document.getElementById('eligSub');
+  const rulesEl = document.getElementById('eligRules');
+  const nextEl  = document.getElementById('eligNextDate');
+
+  box.className = 'elig-result show ' + verdict;
+
+  if(verdict === 'can'){
+    icon.textContent  = '✅';
+    title.textContent = 'You are ELIGIBLE to donate blood!';
+    sub.textContent   = 'All eligibility criteria have been met.';
+  } else if(verdict === 'wait'){
+    icon.textContent  = '⏳';
+    title.textContent = 'Please wait before donating';
+    sub.textContent   = 'Some conditions apply. See the details below.';
+  } else {
+    icon.textContent  = '❌';
+    title.textContent = 'You are NOT eligible to donate at this time';
+    sub.textContent   = 'One or more conditions prevent you from donating right now.';
+  }
+
+  rulesEl.innerHTML = rules.map(r => `
+    <div class="elig-rule">
+      <span class="rule-dot ${r.s === 'ok' ? 'ok' : r.s === 'warn' ? 'warn' : 'bad'}">
+        ${r.s === 'ok' ? '✓' : r.s === 'warn' ? '!' : '✗'}
+      </span>
+      <span>${r.t}</span>
+    </div>`).join('');
+
+  if(nextDateMsg){
+    nextEl.textContent = nextDateMsg;
+    nextEl.classList.add('show');
+  } else {
+    nextEl.classList.remove('show');
+  }
+
+  box.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+// Init
+document.getElementById('tabCount').textContent = donors.length;
+document.getElementById('heroCount').textContent = donors.length;
+renderDonors(donors);
+</script>
+</body>
+</html>
